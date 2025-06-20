@@ -23,14 +23,14 @@ public class AuthControllerImpl implements AuthController{
     private AuthService authService;
 
     @Override
-    @PostMapping("/signup")
+    @PostMapping("/sign-up")
     public ResponseEntity<UserDTO> register(@RequestBody UserRegistrationDTO request) {
         UserDTO userDTO = authService.register(request);
         return ResponseEntity.ok(userDTO);
     }
 
     @Override
-    @PostMapping("/signin")
+    @PostMapping("/sign-in")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         LoginResponse response = authService.login(request);
         return ResponseEntity.ok(response);

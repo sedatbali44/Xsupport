@@ -20,8 +20,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final String signinUrl = "/auth/signin";
-    private final String signupUrl = "/auth/signup";
+    private final String signInUrl = "/auth/sign-in";
+    private final String signupUrl = "/auth/sign-up";
 
     private final @Lazy JwtAuthFilter jwtAuthFilter;
     private final UserDetailsService userDetailsService;
@@ -44,7 +44,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(signinUrl, signupUrl).permitAll()
+                        .requestMatchers(signInUrl).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
