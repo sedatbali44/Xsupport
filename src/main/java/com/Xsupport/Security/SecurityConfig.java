@@ -23,7 +23,7 @@ public class SecurityConfig {
     private final String signInUrl = "/auth/sign-in";
     private final String signupUrl = "/auth/sign-up";
 
-    private final @Lazy JwtAuthFilter jwtAuthFilter;
+    private final JwtAuthFilter jwtAuthFilter;
     private final UserDetailsService userDetailsService;
 
     @Bean
