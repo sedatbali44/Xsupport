@@ -1,5 +1,6 @@
 package com.Xsupport.Dto.User;
 
+import com.Xsupport.Entity.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -24,4 +25,8 @@ public class UserRegistrationDTO {
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
     private String email;
+
+    @NotBlank(message = "Role is required")
+    @Email(message = "Role should be valid")
+    private Role role;
 }

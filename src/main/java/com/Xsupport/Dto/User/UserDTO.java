@@ -18,4 +18,5 @@ public class UserDTO {
     private Role role;
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
+    private LocalDateTime lastLogin;
 }

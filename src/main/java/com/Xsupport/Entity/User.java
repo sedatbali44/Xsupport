@@ -32,6 +32,7 @@ public class User {
     @Column(unique = true, nullable = false)
     private String username;
 
+    @NotBlank(message = "Password is required")
     @Column(nullable = false)
     private String password;
 
@@ -50,6 +51,9 @@ public class User {
 
     @Column(name = "updated_time")
     private LocalDateTime updatedTime;
+
+    @Column(name = "last_login")
+    private LocalDateTime lastLogin;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Ticket> tickets;
