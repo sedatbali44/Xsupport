@@ -47,11 +47,4 @@ public class Ticket {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Ticket(String title, String description, Category category, User user) {
-        this.title = title;
-        this.description = description;
-        this.category = category;
-        this.user = user;
-        this.status = Status.OPEN;
-    }
 }
