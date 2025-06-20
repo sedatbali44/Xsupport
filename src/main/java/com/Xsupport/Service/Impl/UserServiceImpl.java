@@ -7,7 +7,7 @@ import com.Xsupport.Entity.User;
 import com.Xsupport.Exception.ExceptionMessage;
 import com.Xsupport.Repo.UserRepository;
 import com.Xsupport.Service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,13 +17,11 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository repo;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository repo;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Optional<User> findByEmail(String email) {
@@ -54,7 +52,6 @@ public class UserServiceImpl implements UserService {
         return mapToDTO(savedUser);
     }
 
-
     @Override
     public UserDTO mapToDTO(User user) {
         return UserDTO.builder()
@@ -84,6 +81,4 @@ public class UserServiceImpl implements UserService {
         String email = auth.getName();
         return findByEmail(email).orElseThrow(() -> new RuntimeException(ExceptionMessage.USER_NOT_FOUND.getMessage()));
     }
-
-
 }

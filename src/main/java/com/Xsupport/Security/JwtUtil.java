@@ -1,6 +1,5 @@
 package com.Xsupport.Security;
 
-import com.Xsupport.Entity.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -36,10 +35,10 @@ public class JwtUtil {
                 .getSubject();
     }
 
-    public boolean isTokenValid(String token, User user) {
+    public boolean isTokenValid(String token, String username) {
         try {
-            String username = extractUsername(token);
-            return username.equals(user.getEmail()) && !isTokenExpired(token);
+            String extractedUsername = extractUsername(token);
+            return extractedUsername.equals(username) && !isTokenExpired(token);
         } catch (Exception e) {
             return false;
         }
@@ -54,5 +53,4 @@ public class JwtUtil {
                 .getExpiration();
         return expiration.before(new Date());
     }
-
 }
