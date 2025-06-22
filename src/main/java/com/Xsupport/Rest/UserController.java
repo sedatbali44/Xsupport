@@ -1,6 +1,7 @@
 package com.Xsupport.Rest;
 
 import com.Xsupport.Dto.User.UserDTO;
+import com.Xsupport.Dto.User.UserUpdateDTO;
 import com.Xsupport.Entity.User;
 import org.springframework.http.ResponseEntity;
 
@@ -14,4 +15,6 @@ public interface UserController {
     ResponseEntity<List<UserDTO>> findAll();
 
     ResponseEntity<Optional<User>> findByUsername(String username);
+
+    ResponseEntity<UserDTO> updateUser(UserUpdateDTO request);
 }

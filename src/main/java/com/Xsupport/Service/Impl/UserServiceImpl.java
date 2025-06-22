@@ -2,17 +2,20 @@ package com.Xsupport.Service.Impl;
 
 import com.Xsupport.Dto.User.UserDTO;
 import com.Xsupport.Dto.User.UserRegistrationDTO;
+import com.Xsupport.Dto.User.UserUpdateDTO;
 import com.Xsupport.Entity.Role;
 import com.Xsupport.Entity.User;
 import com.Xsupport.Exception.ExceptionMessage;
 import com.Xsupport.Repo.UserRepository;
 import com.Xsupport.Service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -70,15 +73,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUser(UserRegistrationDTO request) {
+    public UserDTO updateUser(UserUpdateDTO request) {
         User currentUser = getCurrentUser();
 
         if (currentUser.getRole() != Role.ADMIN) {
             throw new AccessDeniedException(ExceptionMessage.UNAUTHORIZED_ACTION.getMessage());
         }
 
-        return save(request);
+        User user = repo.findById(request.getId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        ExceptionMessage.RECORD_NOT_FOUND.getMessage() + " " + request.getId()
+                ));
+
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+
+        user.setUpdatedTime(LocalDateTime.now());
+        User savedUser = repo.save(user);
+        return mapToDTO(savedUser);
     }
+
 
     @Override
     public User getCurrentUser() {

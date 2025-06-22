@@ -1,6 +1,7 @@
 package com.Xsupport.Rest.Impl;
 
 import com.Xsupport.Dto.User.UserDTO;
+import com.Xsupport.Dto.User.UserUpdateDTO;
 import com.Xsupport.Entity.User;
 import com.Xsupport.Rest.UserController;
 import com.Xsupport.Service.UserService;
@@ -39,5 +40,11 @@ public class UserControllerImpl implements UserController {
     @GetMapping("/find-byname")
     public ResponseEntity<Optional<User>> findByUsername(@RequestParam String username) {
         return ResponseEntity.ok(userService.findByUsername(username));
+    }
+
+    @Override
+    @PutMapping("/update")
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserUpdateDTO request) {
+        return ResponseEntity.ok(userService.updateUser(request));
     }
 }

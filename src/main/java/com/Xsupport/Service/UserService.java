@@ -2,6 +2,7 @@ package com.Xsupport.Service;
 
 import com.Xsupport.Dto.User.UserDTO;
 import com.Xsupport.Dto.User.UserRegistrationDTO;
+import com.Xsupport.Dto.User.UserUpdateDTO;
 import com.Xsupport.Entity.User;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public interface UserService {
 
     User getCurrentUser();
 
-    UserDTO updateUser(UserRegistrationDTO request);
+    UserDTO updateUser(UserUpdateDTO request);
 
     void setLastLogin(User user);
 
