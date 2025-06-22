@@ -10,10 +10,13 @@ import com.Xsupport.Exception.ExceptionMessage;
 import com.Xsupport.Security.JwtUtil;
 import com.Xsupport.Service.AuthService;
 import com.Xsupport.Service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 
 @Service
@@ -45,6 +48,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String token = jwtUtil.generateToken(user.getEmail());
+        userService.setLastLogin(user);
         UserDTO userDTO = userService.mapToDTO(user);
         return new LoginResponse(token, userDTO);
     }

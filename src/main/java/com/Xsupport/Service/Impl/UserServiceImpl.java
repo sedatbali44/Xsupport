@@ -23,6 +23,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repo;
     private final PasswordEncoder passwordEncoder;
 
+
     @Override
     public Optional<User> findByEmail(String email) {
         return repo.findByEmail(email);
@@ -81,5 +82,12 @@ public class UserServiceImpl implements UserService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         return findByEmail(email).orElseThrow(() -> new RuntimeException(ExceptionMessage.USER_NOT_FOUND.getMessage()));
+    }
+
+
+    @Override
+    public void setLastLogin(User user) {
+        user.setLastLogin(LocalDateTime.now());
+        repo.save(user);
     }
 }

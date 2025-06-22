@@ -19,4 +19,6 @@ public interface UserService {
     User getCurrentUser();
 
     UserDTO updateUser(UserRegistrationDTO request);
+
+    void setLastLogin(User user);
 }
