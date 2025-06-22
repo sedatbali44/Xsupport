@@ -14,7 +14,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +48,7 @@ public class UserServiceImpl implements UserService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
                 .createdTime(LocalDateTime.now())
+                .updatedTime(LocalDateTime.now())
                 .build();
 
         User savedUser = repo.save(user);
@@ -61,7 +64,7 @@ public class UserServiceImpl implements UserService {
                 .email(user.getEmail())
                 .role(user.getRole())
                 .createdTime(user.getCreatedTime())
-                .updatedTime(LocalDateTime.now())
+                .updatedTime(user.getUpdatedTime())
                 .lastLogin(user.getLastLogin())
                 .build();
     }
@@ -89,5 +92,19 @@ public class UserServiceImpl implements UserService {
     public void setLastLogin(User user) {
         user.setLastLogin(LocalDateTime.now());
         repo.save(user);
+    }
+
+    @Override
+    public List<UserDTO> findAll() {
+        User currentUser = getCurrentUser();
+
+        if (currentUser.getRole() != Role.ADMIN) {
+            throw new AccessDeniedException(ExceptionMessage.UNAUTHORIZED_ACTION.getMessage());
+        }
+
+        List<User> userList = repo.findAll();
+        return userList.stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
 }

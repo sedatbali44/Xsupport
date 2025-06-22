@@ -4,6 +4,7 @@ import com.Xsupport.Dto.User.UserDTO;
 import com.Xsupport.Dto.User.UserRegistrationDTO;
 import com.Xsupport.Entity.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -21,4 +22,7 @@ public interface UserService {
     UserDTO updateUser(UserRegistrationDTO request);
 
     void setLastLogin(User user);
+
+    List<UserDTO> findAll();
+
 }
