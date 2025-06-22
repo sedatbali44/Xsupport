@@ -22,6 +22,11 @@ public class SecurityConfig {
 
     private final String signInUrl = "/auth/sign-in";
     private final String signupUrl = "/auth/sign-up";
+    private final String swaggerUi = "/swagger-ui/**";
+    private final String swaggerPage = "/swagger-ui.html";
+    private final String vApiDcos = "/v3/api-docs/**";
+    private final String apiDocs = "/api-docs/**";
+
 
     private final JwtAuthFilter jwtAuthFilter;
     private final UserDetailsService userDetailsService;
@@ -44,7 +49,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(signInUrl).permitAll()
+                        .requestMatchers(signInUrl,swaggerUi, swaggerPage, vApiDcos, apiDocs).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
