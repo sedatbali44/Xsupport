@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
                 .email(user.getEmail())
                 .role(user.getRole())
                 .createdTime(user.getCreatedTime())
-                .updatedTime(user.getUpdatedTime())
+                .updatedTime(LocalDateTime.now())
                 .lastLogin(user.getLastLogin())
                 .build();
     }
