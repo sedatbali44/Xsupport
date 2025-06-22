@@ -4,14 +4,17 @@ package com.Xsupport.Service.Impl;
 import com.Xsupport.Dto.Ticket.TicketCreateDTO;
 import com.Xsupport.Dto.Ticket.TicketDTO;
 import com.Xsupport.Dto.Ticket.TicketSearchDTO;
+import com.Xsupport.Entity.Role;
 import com.Xsupport.Entity.Status;
 import com.Xsupport.Entity.Ticket;
 import com.Xsupport.Entity.User;
+import com.Xsupport.Exception.ExceptionMessage;
 import com.Xsupport.Repo.TicketRepository;
 import com.Xsupport.Service.TicketService;
 import com.Xsupport.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,17 +36,23 @@ public class TicketServiceImpl implements TicketService {
         return repo.findByUser(userId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Ticket> findByCurrentUser() {
         User user = userService.getCurrentUser();
         return findByUser(user.getId());
     }
 
-    @Override
     @Transactional(readOnly = true)
+    @Override
     public List<Ticket> findTicketsWithFilter(TicketSearchDTO request) {
-        return repo.findTicketsWithFilter(request.getCategory(),request.getStatus());
+        User user = userService.getCurrentUser();
+        if (user.getRole() != Role.ADMIN) {
+            throw new AccessDeniedException(ExceptionMessage.UNAUTHORIZED_ACTION.getMessage());
+        }
+        return repo.findTicketsWithFilter(request.getCategory(), request.getStatus());
     }
+
 
     @Override
     public TicketDTO create(TicketCreateDTO request) {
@@ -70,7 +79,7 @@ public class TicketServiceImpl implements TicketService {
                 .description(ticket.getDescription())
                 .title(ticket.getTitle())
                 .createdTime(ticket.getCreatedTime())
-                .updatedTime(ticket.getUpdatedTime())
+                .updatedTime(LocalDateTime.now())
                 .build();
     }
 }

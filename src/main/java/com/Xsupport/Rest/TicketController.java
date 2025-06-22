@@ -13,4 +13,6 @@ public interface TicketController {
     ResponseEntity<TicketDTO> create(TicketCreateDTO request);
 
     ResponseEntity<List<Ticket>> findTicketsWithFilter(TicketSearchDTO request);
+
+    ResponseEntity<List<Ticket>> findByCurrentUser();
 }

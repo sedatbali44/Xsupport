@@ -68,11 +68,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updateUser(UserRegistrationDTO request) {
         User currentUser = getCurrentUser();
-        if (currentUser.getRole().equals(Role.ADMIN)) {
-            return save(request);
-        } else {
+
+        if (currentUser.getRole() != Role.ADMIN) {
             throw new AccessDeniedException(ExceptionMessage.UNAUTHORIZED_ACTION.getMessage());
         }
+
+        return save(request);
     }
 
     @Override
