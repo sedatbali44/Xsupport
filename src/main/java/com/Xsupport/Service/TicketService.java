@@ -6,6 +6,8 @@ import com.Xsupport.Dto.Ticket.TicketSearchDTO;
 import com.Xsupport.Entity.Category;
 import com.Xsupport.Entity.Status;
 import com.Xsupport.Entity.Ticket;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -16,7 +18,7 @@ public interface TicketService {
 
     List<Ticket> findByCurrentUser();
 
-    List<Ticket> findTicketsWithFilter(TicketSearchDTO request);
+    Page<TicketDTO> findTicketsWithFilter(TicketSearchDTO request, Pageable pageable);
 
     TicketDTO create(TicketCreateDTO request);
 

@@ -14,6 +14,8 @@ import com.Xsupport.Service.TicketService;
 import com.Xsupport.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,12 +47,14 @@ public class TicketServiceImpl implements TicketService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Ticket> findTicketsWithFilter(TicketSearchDTO request) {
+    public Page<TicketDTO> findTicketsWithFilter(TicketSearchDTO request, Pageable pageable) {
         User user = userService.getCurrentUser();
         if (user.getRole() != Role.ADMIN) {
             throw new AccessDeniedException(ExceptionMessage.UNAUTHORIZED_ACTION.getMessage());
         }
-        return repo.findTicketsWithFilter(request.getCategory(), request.getStatus());
+
+        Page<Ticket> tickets = repo.findTicketsWithFilter(request.getCategory(), request.getStatus(), pageable);
+        return tickets.map(this::mapToDTO);
     }
 
 
@@ -70,16 +74,19 @@ public class TicketServiceImpl implements TicketService {
         return mapToDTO(ticket);
     }
 
-
     @Override
     public TicketDTO mapToDTO(Ticket ticket) {
         return TicketDTO.builder()
                 .id(ticket.getId())
-                .category(ticket.getCategory())
-                .description(ticket.getDescription())
                 .title(ticket.getTitle())
+                .description(ticket.getDescription())
+                .category(ticket.getCategory())
+                .status(ticket.getStatus())
+                .adminResponse(ticket.getAdminResponse())
                 .createdTime(ticket.getCreatedTime())
-                .updatedTime(LocalDateTime.now())
+                .updatedTime(ticket.getUpdatedTime())
+                .userId(ticket.getUser().getId())
                 .build();
     }
+
 }

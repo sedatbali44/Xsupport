@@ -8,6 +8,10 @@ import com.Xsupport.Rest.TicketController;
 import com.Xsupport.Service.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -30,11 +34,11 @@ public class TicketControllerImpl implements TicketController {
         return ResponseEntity.ok(ticketService.create(request));
     }
 
-    @Override
     @GetMapping("/all")
-    public ResponseEntity<List<Ticket>> findTicketsWithFilter(@Validated TicketSearchDTO request) {
-        return ResponseEntity.ok(ticketService.findTicketsWithFilter(request));
+    public ResponseEntity<Page<TicketDTO>> findTicketsWithFilter(@Validated TicketSearchDTO request, @PageableDefault(size = 10, sort = "createdTime", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(ticketService.findTicketsWithFilter(request, pageable));
     }
+
 
     @Override
     @GetMapping("/own-tickets")
