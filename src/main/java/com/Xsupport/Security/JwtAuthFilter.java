@@ -1,5 +1,6 @@
 package com.Xsupport.Security;
 
+import com.Xsupport.Exception.ExceptionMessage;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -64,7 +65,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception e) {
-            logger.error("Cannot set user authentication: {}", e);
+            throw new RuntimeException(ExceptionMessage.CAN_NOT_SET_AUTHENTIATION.getMessage() + "{}", e);
         }
 
         filterChain.doFilter(request, response);

@@ -3,6 +3,7 @@ package com.Xsupport.Entity;
 public enum Role {
 
     USER,
+    CUSTOMER,
     ADMIN;
 
 

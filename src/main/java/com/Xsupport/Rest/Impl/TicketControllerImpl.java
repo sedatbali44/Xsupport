@@ -1,0 +1,40 @@
+package com.Xsupport.Rest.Impl;
+
+import com.Xsupport.Dto.Ticket.TicketCreateDTO;
+import com.Xsupport.Dto.Ticket.TicketDTO;
+import com.Xsupport.Dto.Ticket.TicketSearchDTO;
+import com.Xsupport.Dto.User.UserDTO;
+import com.Xsupport.Dto.User.UserRegistrationDTO;
+import com.Xsupport.Entity.Ticket;
+import com.Xsupport.Rest.TicketController;
+import com.Xsupport.Service.TicketService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
+
+@RestController
+@RequestMapping("/ticket")
+@CrossOrigin(origins = "http://localhost:3000")
+@RequiredArgsConstructor
+public class TicketControllerImpl implements TicketController {
+
+    @Autowired
+    private TicketService ticketService;
+
+
+    @Override
+    @PostMapping("/create")
+    public ResponseEntity<TicketDTO> create(@RequestBody TicketCreateDTO request) {
+        return ResponseEntity.ok(ticketService.create(request));
+    }
+
+    @Override
+    @GetMapping("/all")
+    public ResponseEntity<List<Ticket>> findTicketsWithFilter(@Validated TicketSearchDTO request) {
+        return ResponseEntity.ok(ticketService.findTicketsWithFilter(request));
+    }
+}

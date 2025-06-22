@@ -1,23 +1,22 @@
-package com.Xsupport.Rest;
+package com.Xsupport.Rest.Impl;
 
 
 import com.Xsupport.Dto.Login.LoginRequest;
 import com.Xsupport.Dto.Login.LoginResponse;
 import com.Xsupport.Dto.User.UserDTO;
 import com.Xsupport.Dto.User.UserRegistrationDTO;
+import com.Xsupport.Rest.AuthController;
 import com.Xsupport.Service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
-public class AuthControllerImpl implements AuthController{
+public class AuthControllerImpl implements AuthController {
 
     @Autowired
     private AuthService authService;
@@ -25,14 +24,12 @@ public class AuthControllerImpl implements AuthController{
     @Override
     @PostMapping("/sign-up")
     public ResponseEntity<UserDTO> register(@RequestBody UserRegistrationDTO request) {
-        UserDTO userDTO = authService.register(request);
-        return ResponseEntity.ok(userDTO);
+        return ResponseEntity.ok(authService.register(request));
     }
 
     @Override
     @PostMapping("/sign-in")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-        LoginResponse response = authService.login(request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(authService.login(request));
     }
 }
