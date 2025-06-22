@@ -3,6 +3,7 @@ package com.Xsupport.Rest.Impl;
 import com.Xsupport.Dto.Ticket.TicketCreateDTO;
 import com.Xsupport.Dto.Ticket.TicketDTO;
 import com.Xsupport.Dto.Ticket.TicketSearchDTO;
+import com.Xsupport.Dto.Ticket.TicketUpdateDTO;
 import com.Xsupport.Entity.Ticket;
 import com.Xsupport.Rest.TicketController;
 import com.Xsupport.Service.TicketService;
@@ -32,6 +33,12 @@ public class TicketControllerImpl implements TicketController {
     @PostMapping("/create")
     public ResponseEntity<TicketDTO> create(@RequestBody TicketCreateDTO request) {
         return ResponseEntity.ok(ticketService.create(request));
+    }
+
+    @Override
+    @PutMapping("/update")
+    public ResponseEntity<TicketDTO> update(@RequestBody TicketUpdateDTO request) {
+        return ResponseEntity.ok(ticketService.update(request));
     }
 
     @GetMapping("/all")

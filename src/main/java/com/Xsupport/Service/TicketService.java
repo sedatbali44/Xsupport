@@ -3,6 +3,7 @@ package com.Xsupport.Service;
 import com.Xsupport.Dto.Ticket.TicketCreateDTO;
 import com.Xsupport.Dto.Ticket.TicketDTO;
 import com.Xsupport.Dto.Ticket.TicketSearchDTO;
+import com.Xsupport.Dto.Ticket.TicketUpdateDTO;
 import com.Xsupport.Entity.Category;
 import com.Xsupport.Entity.Status;
 import com.Xsupport.Entity.Ticket;
@@ -21,6 +22,8 @@ public interface TicketService {
     Page<TicketDTO> findTicketsWithFilter(TicketSearchDTO request, Pageable pageable);
 
     TicketDTO create(TicketCreateDTO request);
+
+    TicketDTO update(TicketUpdateDTO request);
 
     TicketDTO mapToDTO(Ticket ticket);
 }

@@ -2,6 +2,7 @@ package com.Xsupport.Exception;
 
 public enum ExceptionMessage {
     INVALID_CREDENTIALS("Invalid credentials"),
+    RECORD_NOT_FOUND("Record not found"),
     USER_ALREADY_EXISTS("User already exists"),
     USER_NOT_FOUND("User not found"),
     CAN_NOT_SET_AUTHENTIATION("Cannot set user authentication"),

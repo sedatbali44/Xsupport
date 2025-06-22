@@ -1,7 +1,7 @@
 package com.Xsupport.Dto.Ticket;
 
+import com.Xsupport.Entity.Category;
 import com.Xsupport.Entity.Status;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +12,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TicketUpdateDTO {
-    private Status status;
 
-    @Size(max = 1000, message = "Admin response cannot exceed 1000 characters")
+    private String title;
+    private String description;
+    private Category category;
+    private Status status;
     private String adminResponse;
+    private Long id;
 }

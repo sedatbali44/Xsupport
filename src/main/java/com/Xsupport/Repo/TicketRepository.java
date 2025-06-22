@@ -21,11 +21,13 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     @Query("SELECT t " +
             "FROM Ticket t WHERE " +
+            "(:title IS NULL OR t.title = :title) AND " +
             "(:category IS NULL OR t.category = :category) AND " +
             "(:status IS NULL OR t.status = :status)")
     Page<Ticket> findTicketsWithFilter(
             @Param("category") Category category,
             @Param("status") Status status,
+            @Param("title") String title,
             Pageable pageable);
 
 

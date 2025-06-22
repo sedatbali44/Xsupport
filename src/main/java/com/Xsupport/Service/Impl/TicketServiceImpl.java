@@ -4,6 +4,7 @@ package com.Xsupport.Service.Impl;
 import com.Xsupport.Dto.Ticket.TicketCreateDTO;
 import com.Xsupport.Dto.Ticket.TicketDTO;
 import com.Xsupport.Dto.Ticket.TicketSearchDTO;
+import com.Xsupport.Dto.Ticket.TicketUpdateDTO;
 import com.Xsupport.Entity.Role;
 import com.Xsupport.Entity.Status;
 import com.Xsupport.Entity.Ticket;
@@ -12,6 +13,7 @@ import com.Xsupport.Exception.ExceptionMessage;
 import com.Xsupport.Repo.TicketRepository;
 import com.Xsupport.Service.TicketService;
 import com.Xsupport.Service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,9 +21,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -53,7 +55,13 @@ public class TicketServiceImpl implements TicketService {
             throw new AccessDeniedException(ExceptionMessage.UNAUTHORIZED_ACTION.getMessage());
         }
 
-        Page<Ticket> tickets = repo.findTicketsWithFilter(request.getCategory(), request.getStatus(), pageable);
+        Page<Ticket> tickets = repo.findTicketsWithFilter(
+                request.getCategory(),
+                request.getStatus(),
+                request.getTitle(),
+                pageable
+        );
+
         return tickets.map(this::mapToDTO);
     }
 
@@ -73,6 +81,25 @@ public class TicketServiceImpl implements TicketService {
 
         return mapToDTO(ticket);
     }
+
+
+    @Override
+    public TicketDTO update(TicketUpdateDTO request) {
+        Ticket ticket = repo.findById(request.getId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        ExceptionMessage.RECORD_NOT_FOUND.getMessage() + " " + request.getId()
+                ));
+
+        ticket.setDescription(request.getDescription());
+        ticket.setCategory(request.getCategory());
+        ticket.setTitle(request.getTitle());
+        ticket.setStatus(request.getStatus());
+        ticket.setUpdatedTime(LocalDateTime.now());
+        repo.save(ticket);
+
+        return mapToDTO(ticket);
+    }
+
 
     @Override
     public TicketDTO mapToDTO(Ticket ticket) {

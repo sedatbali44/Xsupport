@@ -3,6 +3,7 @@ package com.Xsupport.Rest;
 import com.Xsupport.Dto.Ticket.TicketCreateDTO;
 import com.Xsupport.Dto.Ticket.TicketDTO;
 import com.Xsupport.Dto.Ticket.TicketSearchDTO;
+import com.Xsupport.Dto.Ticket.TicketUpdateDTO;
 import com.Xsupport.Entity.Ticket;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,8 @@ import java.util.List;
 public interface TicketController {
 
     ResponseEntity<TicketDTO> create(TicketCreateDTO request);
+
+    ResponseEntity<TicketDTO> update(TicketUpdateDTO request);
 
     ResponseEntity<Page<TicketDTO>> findTicketsWithFilter(TicketSearchDTO request, Pageable pageable);
 
