@@ -49,8 +49,8 @@ public class TicketServiceImpl implements TicketService {
     @Transactional(readOnly = true)
     @Override
     public Page<TicketDTO> findTicketsWithFilter(TicketSearchDTO request, Pageable pageable) {
-        User user = userService.getCurrentUser();
-        if (user.getRole() != Role.ADMIN) {
+        Boolean isAuthorized = userService.isAuthorized();
+        if (!isAuthorized) {
             throw new AccessDeniedException(ExceptionMessage.UNAUTHORIZED_ACTION.getMessage());
         }
 
@@ -84,6 +84,12 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public TicketDTO update(TicketUpdateDTO request) {
+
+        Boolean isAuthorized = userService.isAuthorized();
+        if (!isAuthorized) {
+            throw new AccessDeniedException(ExceptionMessage.UNAUTHORIZED_ACTION.getMessage());
+        }
+
         Ticket ticket = repo.findById(request.getId())
                 .orElseThrow(() -> new EntityNotFoundException(
                         ExceptionMessage.RECORD_NOT_FOUND.getMessage() + " " + request.getId()
@@ -94,6 +100,7 @@ public class TicketServiceImpl implements TicketService {
         ticket.setTitle(request.getTitle());
         ticket.setStatus(request.getStatus());
         ticket.setUpdatedTime(LocalDateTime.now());
+        ticket.setAdminResponse(request.getAdminResponse());
         repo.save(ticket);
 
         return mapToDTO(ticket);
@@ -119,8 +126,8 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public String delete(String id) {
         try {
-            User user = userService.getCurrentUser();
-            if (user.getRole() != Role.ADMIN) {
+            Boolean isAuthorized = userService.isAuthorized();
+            if (!isAuthorized) {
                 throw new AccessDeniedException(ExceptionMessage.UNAUTHORIZED_ACTION.getMessage());
             }
             long parsedId = Long.parseLong(id);

@@ -20,6 +20,8 @@ public interface UserService {
 
     User getCurrentUser();
 
+    Boolean isAuthorized();
+
     UserDTO updateUser(UserUpdateDTO request);
 
     void setLastLogin(User user);

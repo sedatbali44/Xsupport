@@ -10,6 +10,7 @@ import com.Xsupport.Repo.UserRepository;
 import com.Xsupport.Service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -74,9 +76,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO updateUser(UserUpdateDTO request) {
-        User currentUser = getCurrentUser();
-
-        if (currentUser.getRole() != Role.ADMIN) {
+        Boolean isAuthorized = isAuthorized();
+        if (!isAuthorized) {
+            log.info("UNAUTHORIZED ACTION to update user");
             throw new AccessDeniedException(ExceptionMessage.UNAUTHORIZED_ACTION.getMessage());
         }
 
@@ -105,18 +107,28 @@ public class UserServiceImpl implements UserService {
         return findByEmail(email).orElseThrow(() -> new RuntimeException(ExceptionMessage.USER_NOT_FOUND.getMessage()));
     }
 
+    @Override
+    public Boolean isAuthorized() {
+        User user = getCurrentUser();
+        if (user.getRole() != Role.ADMIN) {
+            return false;
+        }
+        return true;
+    }
+
 
     @Override
     public void setLastLogin(User user) {
         user.setLastLogin(LocalDateTime.now());
+        log.info("Logged user:{}",user.getUsername());
         repo.save(user);
     }
 
     @Override
     public List<UserDTO> findAll() {
-        User currentUser = getCurrentUser();
-
-        if (currentUser.getRole() != Role.ADMIN) {
+        Boolean isAuthorized = isAuthorized();
+        if (!isAuthorized) {
+            log.info("UNAUTHORIZED ACTION");
             throw new AccessDeniedException(ExceptionMessage.UNAUTHORIZED_ACTION.getMessage());
         }
 

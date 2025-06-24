@@ -5,6 +5,7 @@ import com.Xsupport.Dto.Login.LoginRequest;
 import com.Xsupport.Dto.Login.LoginResponse;
 import com.Xsupport.Dto.User.UserDTO;
 import com.Xsupport.Dto.User.UserRegistrationDTO;
+import com.Xsupport.Entity.ResponseMessage;
 import com.Xsupport.Entity.User;
 import com.Xsupport.Exception.ExceptionMessage;
 import com.Xsupport.Security.JwtUtil;
@@ -17,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Service
@@ -27,10 +30,12 @@ public class AuthServiceImpl implements AuthService {
     private UserService userService;
 
     @Autowired
-    private  PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private  JwtUtil jwtUtil;
+    private JwtUtil jwtUtil;
+
+    private final Set<String> blacklistedTokens = new HashSet<>();
 
     @Override
     public UserDTO register(UserRegistrationDTO request) {
@@ -51,6 +56,33 @@ public class AuthServiceImpl implements AuthService {
         userService.setLastLogin(user);
         UserDTO userDTO = userService.mapToDTO(user);
         return new LoginResponse(token, userDTO);
+    }
+
+
+    @Override
+    public String logout(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+
+        if (header != null && header.startsWith("Bearer ")) {
+            String token = header.substring(7);
+            boolean isTokenBlacklisted = isTokenBlacklisted(token);
+            if (isTokenBlacklisted) {
+                return ResponseMessage.ALREADY_LOGGED_OUT.getValue();
+            }
+            blacklistToken(token);
+            return ResponseMessage.LOG_OUT_RESPONSE.getValue();
+        } else {
+            throw new IllegalArgumentException(ExceptionMessage.INVALID_CREDENTIALS.getMessage());
+        }
+    }
+
+
+    private void blacklistToken(String token) {
+        blacklistedTokens.add(token);
+    }
+
+    private boolean isTokenBlacklisted(String token) {
+        return blacklistedTokens.contains(token);
     }
 
 }

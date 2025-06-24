@@ -7,6 +7,7 @@ import com.Xsupport.Dto.User.UserDTO;
 import com.Xsupport.Dto.User.UserRegistrationDTO;
 import com.Xsupport.Rest.AuthController;
 import com.Xsupport.Service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +27,16 @@ public class AuthControllerImpl implements AuthController {
         return ResponseEntity.ok(authService.register(request));
     }
 
+
     @Override
     @PostMapping("/sign-in")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
+    }
+
+    @Override
+    @PostMapping("/sign-out")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        return ResponseEntity.ok(authService.logout(request));
     }
 }
