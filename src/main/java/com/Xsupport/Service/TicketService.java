@@ -26,4 +26,6 @@ public interface TicketService {
     TicketDTO update(TicketUpdateDTO request);
 
     TicketDTO mapToDTO(Ticket ticket);
+
+    String delete(String id);
 }

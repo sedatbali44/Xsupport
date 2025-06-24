@@ -5,10 +5,7 @@ import com.Xsupport.Dto.Ticket.TicketCreateDTO;
 import com.Xsupport.Dto.Ticket.TicketDTO;
 import com.Xsupport.Dto.Ticket.TicketSearchDTO;
 import com.Xsupport.Dto.Ticket.TicketUpdateDTO;
-import com.Xsupport.Entity.Role;
-import com.Xsupport.Entity.Status;
-import com.Xsupport.Entity.Ticket;
-import com.Xsupport.Entity.User;
+import com.Xsupport.Entity.*;
 import com.Xsupport.Exception.ExceptionMessage;
 import com.Xsupport.Repo.TicketRepository;
 import com.Xsupport.Service.TicketService;
@@ -23,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.Xsupport.Entity.ResponseMessage.RECORD_DELETED;
 
 
 @Service
@@ -115,6 +114,24 @@ public class TicketServiceImpl implements TicketService {
                 .userId(ticket.getUser().getId())
                 .userName(ticket.getUser().getUsername())
                 .build();
+    }
+
+    @Override
+    public String delete(String id) {
+        try {
+            User user = userService.getCurrentUser();
+            if (user.getRole() != Role.ADMIN) {
+                throw new AccessDeniedException(ExceptionMessage.UNAUTHORIZED_ACTION.getMessage());
+            }
+            long parsedId = Long.parseLong(id);
+            if (!repo.existsById(parsedId)) {
+                throw new EntityNotFoundException(ExceptionMessage.RECORD_NOT_FOUND + id);
+            }
+            repo.deleteById(parsedId);
+            return ResponseMessage.RECORD_DELETED.getValue();
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(ExceptionMessage.INVALID_CREDENTIALS + id, e);
+        }
     }
 
 }

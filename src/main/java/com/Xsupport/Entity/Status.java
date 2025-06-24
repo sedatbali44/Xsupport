@@ -1,7 +1,6 @@
 package com.Xsupport.Entity;
 
-import com.Xsupport.Exception.ExceptionMessage;
-import com.fasterxml.jackson.annotation.JsonCreator;
+
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Status {

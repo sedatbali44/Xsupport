@@ -51,4 +51,10 @@ public class TicketControllerImpl implements TicketController {
     public ResponseEntity<List<Ticket>> findByCurrentUser() {
         return ResponseEntity.ok(ticketService.findByCurrentUser());
     }
+
+    @Override
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> delete(@RequestParam  String id) {
+        return ResponseEntity.ok(ticketService.delete(id));
+    }
 }
