@@ -24,4 +24,5 @@ public class TicketDTO {
     private LocalDateTime updatedTime;
     private UserDTO user;
     private Long userId;
+    private String userName;
 }

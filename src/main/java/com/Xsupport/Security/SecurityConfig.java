@@ -54,7 +54,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 signInUrl,
-                                signUpUrl,
                                 swaggerUi,
                                 swaggerPage,
                                 vApiDocs,

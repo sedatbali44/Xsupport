@@ -113,6 +113,7 @@ public class TicketServiceImpl implements TicketService {
                 .createdTime(ticket.getCreatedTime())
                 .updatedTime(ticket.getUpdatedTime())
                 .userId(ticket.getUser().getId())
+                .userName(ticket.getUser().getUsername())
                 .build();
     }
 
