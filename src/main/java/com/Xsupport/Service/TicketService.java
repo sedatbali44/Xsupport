@@ -17,7 +17,7 @@ public interface TicketService {
 
     List<Ticket> findByUser(Long userId);
 
-    List<Ticket> findByCurrentUser();
+    List<TicketDTO> findByCurrentUser();
 
     Page<TicketDTO> findTicketsWithFilter(TicketSearchDTO request, Pageable pageable);
 

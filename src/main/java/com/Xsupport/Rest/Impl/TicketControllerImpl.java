@@ -48,7 +48,7 @@ public class TicketControllerImpl implements TicketController {
 
     @Override
     @GetMapping("/own-tickets")
-    public ResponseEntity<List<Ticket>> findByCurrentUser() {
+    public ResponseEntity<List<TicketDTO>> findByCurrentUser() {
         return ResponseEntity.ok(ticketService.findByCurrentUser());
     }
 

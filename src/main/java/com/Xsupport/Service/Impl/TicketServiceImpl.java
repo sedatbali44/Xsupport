@@ -41,9 +41,10 @@ public class TicketServiceImpl implements TicketService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Ticket> findByCurrentUser() {
+    public List<TicketDTO> findByCurrentUser() {
         User user = userService.getCurrentUser();
-        return findByUser(user.getId());
+        List<Ticket> tickets = findByUser(user.getId());
+        return tickets.stream().map(this::mapToDTO).toList();
     }
 
     @Transactional(readOnly = true)

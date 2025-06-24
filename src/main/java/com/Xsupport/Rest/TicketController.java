@@ -19,7 +19,7 @@ public interface TicketController {
 
     ResponseEntity<Page<TicketDTO>> findTicketsWithFilter(TicketSearchDTO request, Pageable pageable);
 
-    ResponseEntity<List<Ticket>> findByCurrentUser();
+    ResponseEntity<List<TicketDTO>> findByCurrentUser();
 
     ResponseEntity<String> delete(String id);
 }
